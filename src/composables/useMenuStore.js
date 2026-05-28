@@ -52,6 +52,7 @@ export const useMenuStore = defineStore('menu', () => {
           weekday: d ? '周' + '一二三四五'[d.getDay() - 1] : '',
           meat: day.meat,
           veg: day.veg,
+          staple: day.staple || null,
           theme: day.theme || ''
         })
         dateIdx++

@@ -14,7 +14,7 @@ export const VEG_INGREDIENTS = ['蔬菜', '豆制品', '菌菇', '蛋类', '根�
 export const COOKING_METHODS = ['炒', '蒸', '煮', '烧', '烤', '炖', '炸', '拌', '卤', '焖', '煎', '熏']
 
 // 每天菜品数量
-export const MEALS_PER_DAY = { MEAT: 4, VEGETABLE: 3 }
+export const MEALS_PER_DAY = { MEAT: 4, VEGETABLE: 3, STAPLE: 1 }
 
 // 工作日数
 export const WORKDAYS_PER_WEEK = 5
@@ -52,5 +52,6 @@ export const INGREDIENT_ICONS = {
   '豆制品': '🫘',
   '菌菇': '🍄',
   '蛋类': '🥚',
-  '根茎': '🥔'
+  '根茎': '🥔',
+  '面食': '🍜'
 }

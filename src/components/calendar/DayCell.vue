@@ -55,6 +55,14 @@
       </div>
     </div>
 
+    <!-- 面食区 -->
+    <div v-if="day.staple" class="dish-section staple-section">
+      <div class="section-label">🍜 面食</div>
+      <div class="dish-item staple-item">
+        <DishCard :dish="day.staple" compact />
+      </div>
+    </div>
+
     <!-- 替换弹窗 -->
     <DishPickerDialog
       v-model:visible="pickerVisible"

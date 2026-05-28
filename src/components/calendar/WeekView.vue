@@ -36,6 +36,9 @@
       <el-table-column label="素菜 3" width="150">
         <template #default="{ row }"><DishCard v-if="row.veg[2]" :dish="row.veg[2]" /></template>
       </el-table-column>
+      <el-table-column label="🍜 面食" width="150">
+        <template #default="{ row }"><DishCard v-if="row.staple" :dish="row.staple" /></template>
+      </el-table-column>
     </el-table>
 
     <DishPickerDialog

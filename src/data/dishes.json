@@ -4981,5 +4981,359 @@
     "tags": [
       "下饭"
     ]
+  },
+  {
+    "id": "s_001",
+    "name": "担担面",
+    "type": "staple",
+    "cuisine": "川菜",
+    "mainIngredient": "面食",
+    "subIngredient": "肉末",
+    "spiciness": 3,
+    "cookingMethod": "煮",
+    "tags": [
+      "经典"
+    ]
+  },
+  {
+    "id": "s_002",
+    "name": "红烧牛肉面",
+    "type": "staple",
+    "cuisine": "家常菜",
+    "mainIngredient": "面食",
+    "subIngredient": "牛肉",
+    "spiciness": 2,
+    "cookingMethod": "煮",
+    "tags": [
+      "经典"
+    ]
+  },
+  {
+    "id": "s_003",
+    "name": "酸辣粉",
+    "type": "staple",
+    "cuisine": "川菜",
+    "mainIngredient": "面食",
+    "subIngredient": "红薯粉",
+    "spiciness": 3,
+    "cookingMethod": "煮",
+    "tags": [
+      "经典"
+    ]
+  },
+  {
+    "id": "s_004",
+    "name": "炸酱面",
+    "type": "staple",
+    "cuisine": "鲁菜",
+    "mainIngredient": "面食",
+    "subIngredient": "炸酱",
+    "spiciness": 1,
+    "cookingMethod": "拌",
+    "tags": [
+      "经典"
+    ]
+  },
+  {
+    "id": "s_005",
+    "name": "重庆小面",
+    "type": "staple",
+    "cuisine": "川菜",
+    "mainIngredient": "面食",
+    "subIngredient": "辣椒油",
+    "spiciness": 4,
+    "cookingMethod": "煮",
+    "tags": [
+      "经典"
+    ]
+  },
+  {
+    "id": "s_006",
+    "name": "阳春面",
+    "type": "staple",
+    "cuisine": "苏菜",
+    "mainIngredient": "面食",
+    "subIngredient": "葱花",
+    "spiciness": 1,
+    "cookingMethod": "煮",
+    "tags": [
+      "清淡"
+    ]
+  },
+  {
+    "id": "s_007",
+    "name": "臊子面",
+    "type": "staple",
+    "cuisine": "西北菜",
+    "mainIngredient": "面食",
+    "subIngredient": "肉臊",
+    "spiciness": 2,
+    "cookingMethod": "煮",
+    "tags": []
+  },
+  {
+    "id": "s_008",
+    "name": "葱油拌面",
+    "type": "staple",
+    "cuisine": "浙菜",
+    "mainIngredient": "面食",
+    "subIngredient": "葱油",
+    "spiciness": 1,
+    "cookingMethod": "拌",
+    "tags": [
+      "清淡"
+    ]
+  },
+  {
+    "id": "s_009",
+    "name": "热干面",
+    "type": "staple",
+    "cuisine": "家常菜",
+    "mainIngredient": "面食",
+    "subIngredient": "芝麻酱",
+    "spiciness": 1,
+    "cookingMethod": "拌",
+    "tags": [
+      "经典"
+    ]
+  },
+  {
+    "id": "s_010",
+    "name": "油泼面",
+    "type": "staple",
+    "cuisine": "西北菜",
+    "mainIngredient": "面食",
+    "subIngredient": "辣椒面",
+    "spiciness": 3,
+    "cookingMethod": "拌",
+    "tags": [
+      "经典"
+    ]
+  },
+  {
+    "id": "s_011",
+    "name": "麻辣小面",
+    "type": "staple",
+    "cuisine": "川菜",
+    "mainIngredient": "面食",
+    "subIngredient": "花椒",
+    "spiciness": 4,
+    "cookingMethod": "煮",
+    "tags": []
+  },
+  {
+    "id": "s_012",
+    "name": "番茄鸡蛋面",
+    "type": "staple",
+    "cuisine": "家常菜",
+    "mainIngredient": "面食",
+    "subIngredient": "番茄鸡蛋",
+    "spiciness": 1,
+    "cookingMethod": "煮",
+    "tags": [
+      "清淡"
+    ]
+  },
+  {
+    "id": "s_013",
+    "name": "打卤面",
+    "type": "staple",
+    "cuisine": "鲁菜",
+    "mainIngredient": "面食",
+    "subIngredient": "卤汁",
+    "spiciness": 1,
+    "cookingMethod": "拌",
+    "tags": []
+  },
+  {
+    "id": "s_014",
+    "name": "宜宾燃面",
+    "type": "staple",
+    "cuisine": "川菜",
+    "mainIngredient": "面食",
+    "subIngredient": "花生碎",
+    "spiciness": 3,
+    "cookingMethod": "拌",
+    "tags": []
+  },
+  {
+    "id": "s_015",
+    "name": "兰州拉面",
+    "type": "staple",
+    "cuisine": "西北菜",
+    "mainIngredient": "面食",
+    "subIngredient": "牛肉片",
+    "spiciness": 1,
+    "cookingMethod": "煮",
+    "tags": [
+      "经典",
+      "清淡"
+    ]
+  },
+  {
+    "id": "s_016",
+    "name": "刀削面",
+    "type": "staple",
+    "cuisine": "西北菜",
+    "mainIngredient": "面食",
+    "subIngredient": "肉酱",
+    "spiciness": 2,
+    "cookingMethod": "煮",
+    "tags": []
+  },
+  {
+    "id": "s_018",
+    "name": "鸡丝凉面",
+    "type": "staple",
+    "cuisine": "川菜",
+    "mainIngredient": "面食",
+    "subIngredient": "鸡丝",
+    "spiciness": 2,
+    "cookingMethod": "拌",
+    "tags": [
+      "凉菜"
+    ]
+  },
+  {
+    "id": "s_019",
+    "name": "炒河粉",
+    "type": "staple",
+    "cuisine": "粤菜",
+    "mainIngredient": "面食",
+    "subIngredient": "牛肉",
+    "spiciness": 1,
+    "cookingMethod": "炒",
+    "tags": []
+  },
+  {
+    "id": "s_020",
+    "name": "酸汤面",
+    "type": "staple",
+    "cuisine": "西北菜",
+    "mainIngredient": "面食",
+    "subIngredient": "酸菜",
+    "spiciness": 2,
+    "cookingMethod": "煮",
+    "tags": []
+  },
+  {
+    "id": "s_021",
+    "name": "凉面",
+    "type": "staple",
+    "cuisine": "川菜",
+    "mainIngredient": "面食",
+    "subIngredient": "辣椒油",
+    "spiciness": 3,
+    "cookingMethod": "拌",
+    "tags": [
+      "凉菜"
+    ]
+  },
+  {
+    "id": "s_022",
+    "name": "炒面",
+    "type": "staple",
+    "cuisine": "家常菜",
+    "mainIngredient": "面食",
+    "subIngredient": "鸡蛋蔬菜",
+    "spiciness": 1,
+    "cookingMethod": "炒",
+    "tags": []
+  },
+  {
+    "id": "s_023",
+    "name": "馄饨",
+    "type": "staple",
+    "cuisine": "家常菜",
+    "mainIngredient": "面食",
+    "subIngredient": "肉馅",
+    "spiciness": 1,
+    "cookingMethod": "煮",
+    "tags": [
+      "清淡"
+    ]
+  },
+  {
+    "id": "s_024",
+    "name": "水饺",
+    "type": "staple",
+    "cuisine": "家常菜",
+    "mainIngredient": "面食",
+    "subIngredient": "猪肉馅",
+    "spiciness": 1,
+    "cookingMethod": "煮",
+    "tags": [
+      "经典"
+    ]
+  },
+  {
+    "id": "s_025",
+    "name": "蒸饺",
+    "type": "staple",
+    "cuisine": "家常菜",
+    "mainIngredient": "面食",
+    "subIngredient": "韭菜鸡蛋",
+    "spiciness": 1,
+    "cookingMethod": "蒸",
+    "tags": []
+  },
+  {
+    "id": "s_026",
+    "name": "花卷",
+    "type": "staple",
+    "cuisine": "家常菜",
+    "mainIngredient": "面食",
+    "subIngredient": "葱花",
+    "spiciness": 1,
+    "cookingMethod": "蒸",
+    "tags": [
+      "清淡"
+    ]
+  },
+  {
+    "id": "s_027",
+    "name": "馒头",
+    "type": "staple",
+    "cuisine": "家常菜",
+    "mainIngredient": "面食",
+    "subIngredient": "面粉",
+    "spiciness": 1,
+    "cookingMethod": "蒸",
+    "tags": [
+      "清淡"
+    ]
+  },
+  {
+    "id": "s_028",
+    "name": "煎饼",
+    "type": "staple",
+    "cuisine": "鲁菜",
+    "mainIngredient": "面食",
+    "subIngredient": "鸡蛋",
+    "spiciness": 1,
+    "cookingMethod": "煎",
+    "tags": []
+  },
+  {
+    "id": "s_029",
+    "name": "炒饭",
+    "type": "staple",
+    "cuisine": "家常菜",
+    "mainIngredient": "面食",
+    "subIngredient": "鸡蛋火腿",
+    "spiciness": 1,
+    "cookingMethod": "炒",
+    "tags": []
+  },
+  {
+    "id": "s_030",
+    "name": "锅贴",
+    "type": "staple",
+    "cuisine": "家常菜",
+    "mainIngredient": "面食",
+    "subIngredient": "猪肉馅",
+    "spiciness": 1,
+    "cookingMethod": "煎",
+    "tags": []
   }
 ]
