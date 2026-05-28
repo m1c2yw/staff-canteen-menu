@@ -2,12 +2,12 @@
   <div id="app-root">
     <AppHeader />
     <MenuToolbar />
-    <MenuStatsPanel v-if="store.statistics" />
+    <MenuStatsPanel v-if="store.currentStats" />
     <div id="export-area">
-      <div v-if="!store.monthPlan.length" class="empty-state">
-        <el-result icon="info" title="还没有生成菜单" sub-title="点击「自动生成」按钮来生成月度菜单">
+      <div v-if="!store.allPlans.length" class="empty-state">
+        <el-result icon="info" title="还没有生成菜单" sub-title="点击「生成菜单」按钮来生成月度菜单">
           <template #extra>
-            <el-button type="primary" size="large" @click="handleGenerate">🎲 自动生成菜单</el-button>
+            <el-button type="primary" size="large" @click="handleGenerate">🎲 生成菜单</el-button>
           </template>
         </el-result>
       </div>

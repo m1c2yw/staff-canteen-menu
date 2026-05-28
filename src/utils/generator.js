@@ -135,22 +135,23 @@ function selectMeatForDay({ meatPool, usedIds, requiredIngredients, theme, dayIn
     attempts++
     let candidates = meatPool.filter(d => !usedIds.has(d.id))
 
-    // 主题偏好筛选
+    // 先强制主料不重复
+    let unique = candidates.filter(d => !usedIngredientsToday.has(d.mainIngredient))
+    if (unique.length > 0) candidates = unique
+
+    // 主题偏好筛选（在唯一性约束之后）
     if (theme.ingredientPref?.length && selected.length < TARGET - 1) {
       const themed = candidates.filter(d => theme.ingredientPref.includes(d.mainIngredient))
       if (themed.length >= 2) candidates = themed
     }
-    if (theme.cuisinePref?.length) {
+    if (theme.cuisinePref?.length && candidates.length > 2) {
       const themed = candidates.filter(d => theme.cuisinePref.includes(d.cuisine))
       if (themed.length >= 2) candidates = themed
     }
 
-    // 主料不重复（放松：允许偶尔重复，20%概率跳过）
-    if (Math.random() > 0.2) {
-      const unique = candidates.filter(d => !usedIngredientsToday.has(d.mainIngredient))
-      if (unique.length > 0) candidates = unique
+    if (candidates.length === 0) {
+      candidates = meatPool.filter(d => !usedIds.has(d.id) && !usedIngredientsToday.has(d.mainIngredient))
     }
-
     if (candidates.length === 0) {
       candidates = meatPool.filter(d => !usedIds.has(d.id))
     }
@@ -172,30 +173,35 @@ function selectMeatForDay({ meatPool, usedIds, requiredIngredients, theme, dayIn
 // 为某一天选择素菜（主题版）
 function selectVegForDay({ vegPool, usedIds, theme, dayIndex }) {
   const selected = []
+  const usedIngredientsToday = new Set()
   const TARGET = MEALS_PER_DAY.VEGETABLE
   let sichuanCount = 0
   const baseSichuanTarget = 2
   const sichuanTarget = theme.sichuanBoost > 1.0 ? baseSichuanTarget : theme.sichuanBoost < 0.3 ? Math.max(baseSichuanTarget - 1, 0) : baseSichuanTarget
 
   for (let i = 0; i < TARGET; i++) {
-    let candidates = vegPool.filter(d => !usedIds.has(d.id))
+    // 品类不重复优先
+    let candidates = vegPool.filter(d =>
+      !usedIds.has(d.id) && !usedIngredientsToday.has(d.mainIngredient)
+    )
+    if (candidates.length === 0) {
+      candidates = vegPool.filter(d => !usedIds.has(d.id))
+    }
 
     // 主题偏好
-    if (theme.methodPref?.length) {
+    if (theme.methodPref?.length && candidates.length > 2) {
       const themed = candidates.filter(d => theme.methodPref.includes(d.cookingMethod))
       if (themed.length >= 2) candidates = themed
     }
 
-    if (candidates.length === 0) {
-      candidates = vegPool.filter(d => !usedIds.has(d.id))
-    }
     if (candidates.length === 0) break
 
-    const ctx = buildContext(theme, { sichuanCount, sichuanTarget, usedIngredientsToday: new Set(), selectedSoFar: selected, dayIndex })
+    const ctx = buildContext(theme, { sichuanCount, sichuanTarget, usedIngredientsToday, selectedSoFar: selected, dayIndex })
     const dish = weightedPick(candidates, ctx)
     if (dish) {
       selected.push(dish)
       usedIds.add(dish.id)
+      usedIngredientsToday.add(dish.mainIngredient)
       if (dish.cuisine === '川菜') sichuanCount++
     }
   }
@@ -262,7 +268,53 @@ function generateOneMonth({ meatPool, vegPool, usedIds, workdays }) {
     plan.push(weekPlan)
   }
 
+  // 最终去重检查：如果同一个月出现相同菜品，强制替换
+  const allUsedInMonth = new Map() // id → {week, day, type, index}
+  plan.forEach((week, wi) => {
+    week.forEach((day, di) => {
+      day.meat.forEach((dish, si) => {
+        if (allUsedInMonth.has(dish.id)) {
+          // 重复了！找一个未用过的替换
+          const replacement = findReplacement(dish, meatPool, allUsedInMonth, usedIds)
+          if (replacement) {
+            usedIds.delete(dish.id)
+            usedIds.add(replacement.id)
+            day.meat[si] = replacement
+          }
+        }
+        allUsedInMonth.set(dish.id, { week: wi, day: di })
+      })
+      day.veg.forEach((dish, si) => {
+        if (allUsedInMonth.has(dish.id)) {
+          const replacement = findReplacement(dish, vegPool, allUsedInMonth, usedIds)
+          if (replacement) {
+            usedIds.delete(dish.id)
+            usedIds.add(replacement.id)
+            day.veg[si] = replacement
+          }
+        }
+        allUsedInMonth.set(dish.id, { week: wi, day: di })
+      })
+    })
+  })
+
   return plan
+}
+
+// 为重复菜品找替换
+function findReplacement(original, pool, usedMap, usedIds) {
+  const candidates = pool.filter(d =>
+    !usedIds.has(d.id) &&
+    d.mainIngredient === original.mainIngredient &&
+    d.type === original.type
+  )
+  if (candidates.length === 0) {
+    // 放宽：同类型即可
+    const fallback = pool.filter(d => !usedIds.has(d.id) && d.type === original.type)
+    if (fallback.length > 0) return fallback[Math.floor(Math.random() * fallback.length)]
+    return null
+  }
+  return candidates[Math.floor(Math.random() * candidates.length)]
 }
 
 // 统计单月数据
