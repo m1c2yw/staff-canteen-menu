@@ -98,13 +98,13 @@ const ingredients = computed(() => props.slotType === 'meat' ? MEAT_INGREDIENTS 
 // 获取本月已使用的菜品ID
 const usedIds = computed(() => {
   const ids = new Set()
-  store.monthPlan.flat().forEach(day => {
-    ;[...day.meat, ...day.veg].forEach(d => ids.add(d.id))
-  })
-  // 移除当前被替换的菜品ID（允许改回）
-  if (props.currentDish) {
-    ids.delete(props.currentDish.id)
+  const plan = store.currentMonthPlan
+  if (plan.length) {
+    plan.flat().forEach(day => {
+      ;[...day.meat, ...day.veg].forEach(d => ids.add(d.id))
+    })
   }
+  if (props.currentDish) ids.delete(props.currentDish.id)
   return ids
 })
 

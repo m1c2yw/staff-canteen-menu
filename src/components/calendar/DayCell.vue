@@ -3,6 +3,11 @@
     <div class="day-header">
       <span class="day-date">{{ day.date }}</span>
       <span class="day-weekday">{{ day.weekday }}</span>
+      <!-- 主题标签 -->
+      <el-tag v-if="day.theme" size="small" :type="themeType" effect="plain" class="theme-tag">
+        {{ day.theme }}
+      </el-tag>
+
       <!-- 必须食材标签 -->
       <div class="mandatory-tags">
         <el-tag
@@ -70,7 +75,8 @@ import DishPickerDialog from '../dish/DishPickerDialog.vue'
 const props = defineProps({
   day: { type: Object, required: true },
   weekIndex: { type: Number, required: true },
-  dayIndex: { type: Number, required: true }
+  dayIndex: { type: Number, required: true },
+  monthIndex: { type: Number, default: 0 }
 })
 
 const store = useMenuStore()
@@ -89,6 +95,11 @@ const hasIssue = computed(() => {
   return props.day.meat.length < 4 || props.day.veg.length < 3
 })
 
+const themeType = computed(() => {
+  const map = { '川味日': 'danger', '清淡日': 'success', '海鲜日': 'primary', '硬菜日': 'warning', '普通日': 'info' }
+  return map[props.day.theme] || 'info'
+})
+
 function openPicker(type, idx, dish) {
   slotType.value = type
   slotIdx.value = idx
@@ -97,7 +108,7 @@ function openPicker(type, idx, dish) {
 }
 
 function handleReplace(newDish) {
-  store.replaceDish(props.weekIndex, props.dayIndex, slotType.value, slotIdx.value, newDish)
+  store.replaceDish(props.monthIndex, props.weekIndex, props.dayIndex, slotType.value, slotIdx.value, newDish)
 }
 </script>
 

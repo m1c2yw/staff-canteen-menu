@@ -1,79 +1,91 @@
-// 菜品加权评分 — 用于在候选池中智能选择菜品
-import { SICHUAN_TARGET_RATIO } from '../data/constants.js'
-
-/**
- * 计算菜品在当前上下文中的得分
- * @param {Object} dish - 菜品对象
- * @param {Object} context - 上下文 { sichuanCount, sichuanTarget, usedIngredientsToday, selectedSoFar, dayIndex }
- * @returns {number} 得分（越高越优先选择）
- */
+// 菜品加权评分 v2 — 支持主题驱动的动态评分
 export function scoreDish(dish, context = {}) {
   let score = 1.0
-  const { sichuanCount = 0, sichuanTarget = 0, usedIngredientsToday = new Set(), selectedSoFar = [] } = context
+  const {
+    sichuanCount = 0, sichuanTarget = 2,
+    usedIngredientsToday = new Set(),
+    selectedSoFar = [],
+    theme = null
+  } = context
 
-  // 1. 川菜比例平衡
+  // 1. 主题偏好
+  if (theme) {
+    // 菜系偏好
+    if (theme.cuisinePref?.length > 0) {
+      if (theme.cuisinePref.includes(dish.cuisine)) {
+        score *= 2.0
+      } else if (theme.name !== '普通日') {
+        score *= 0.5
+      }
+    }
+    // 烹饪方式偏好
+    if (theme.methodPref?.length > 0 && theme.name !== '普通日') {
+      if (theme.methodPref.includes(dish.cookingMethod)) {
+        score *= 1.5
+      }
+    }
+    // 食材偏好
+    if (theme.ingredientPref?.length > 0) {
+      if (theme.ingredientPref.includes(dish.mainIngredient)) {
+        score *= 2.5
+      }
+    }
+  }
+
+  // 2. 川菜比例平衡（灵活目标）
   const sichuanGap = sichuanTarget - sichuanCount
   if (dish.cuisine === '川菜' && sichuanGap > 0) {
-    score *= 1.0 + sichuanGap * 0.8  // 需要川菜时加分
+    score *= 1.0 + sichuanGap * 0.6
   }
-  if (dish.cuisine === '川菜' && sichuanGap <= -1) {
-    score *= 0.3  // 川菜已超标，降权
-  }
-  if (dish.cuisine !== '川菜' && sichuanGap <= -2) {
-    score *= 1.8  // 川菜严重超标时，非川菜加分
-  }
-
-  // 2. 当天主料不重复
-  if (usedIngredientsToday.has(dish.mainIngredient)) {
-    score *= 0.05  // 近乎禁止同一天出现相同主料
-  }
-
-  // 3. 烹饪方式多样化
-  const methodsUsed = new Set(selectedSoFar.map(d => d.cookingMethod))
-  if (methodsUsed.has(dish.cookingMethod)) {
-    score *= 0.7  // 同烹饪方式降权（适度）
-  }
-
-  // 4. 辣度均衡（目标日均 2.5-3.0）
-  if (selectedSoFar.length > 0) {
-    const avgSpiciness = selectedSoFar.reduce((s, d) => s + d.spiciness, 0) / selectedSoFar.length
-    const deviation = Math.abs(dish.spiciness - avgSpiciness)
-    score *= 1.0 / (1.0 + deviation * 0.15)
-  }
-
-  // 5. 菜系多样性加分
-  const cuisinesUsed = new Set(selectedSoFar.map(d => d.cuisine))
-  if (!cuisinesUsed.has(dish.cuisine) && dish.cuisine !== '川菜') {
-    score *= 1.3  // 引入新菜系加分
-  }
-
-  // 6. 经典菜品轻微加分（优先选择大家熟悉的）
-  if (dish.tags?.includes('经典') && selectedSoFar.length <= 2) {
-    score *= 1.15
-  }
-
-  // 7. 标签多样性：凉菜不宜过多
-  const coldCount = selectedSoFar.filter(d => d.tags?.includes('凉菜')).length
-  if (dish.tags?.includes('凉菜') && coldCount >= 1) {
-    score *= 0.3  // 每天最多1-2个凉菜
-  }
-
-  // 8. 汤类不宜过多
-  const soupCount = selectedSoFar.filter(d => d.tags?.includes('汤')).length
-  if (dish.tags?.includes('汤') && soupCount >= 1) {
+  if (dish.cuisine === '川菜' && sichuanGap <= -2) {
     score *= 0.3
   }
 
-  // 确保分数不为负
+  // 3. 当天主料重复（放松：允许偶尔重复）
+  if (usedIngredientsToday.has(dish.mainIngredient)) {
+    score *= 0.2  // 从0.05放松到0.2，允许偶尔同主料
+  }
+
+  // 4. 烹饪方式多样化（轻度）
+  const methodsUsed = new Set(selectedSoFar.map(d => d.cookingMethod))
+  if (methodsUsed.has(dish.cookingMethod) && methodsUsed.size <= 3) {
+    score *= 0.75
+  }
+
+  // 5. 辣度波动（跟随主题，不强制均衡）
+  if (theme?.spiceShift && selectedSoFar.length > 0) {
+    const avgSpiciness = selectedSoFar.reduce((s, d) => s + d.spiciness, 0) / selectedSoFar.length
+    const targetSpiciness = Math.max(1, Math.min(5, avgSpiciness + theme.spiceShift))
+    const deviation = Math.abs(dish.spiciness - targetSpiciness)
+    score *= 1.0 / (1.0 + deviation * 0.2)
+  } else if (selectedSoFar.length > 2) {
+    // 无主题时轻度均衡
+    const avgSpiciness = selectedSoFar.reduce((s, d) => s + d.spiciness, 0) / selectedSoFar.length
+    const deviation = Math.abs(dish.spiciness - avgSpiciness)
+    score *= 1.0 / (1.0 + deviation * 0.1)
+  }
+
+  // 6. 菜系多样性（保留但降低权重）
+  const cuisinesUsed = new Set(selectedSoFar.map(d => d.cuisine))
+  if (!cuisinesUsed.has(dish.cuisine) && dish.cuisine !== '川菜' && selectedSoFar.length >= 3) {
+    score *= 1.2
+  }
+
+  // 7. 经典菜品偏好
+  if (dish.tags?.includes('经典') && selectedSoFar.length <= 2) {
+    score *= 1.1
+  }
+
+  // 8. 凉菜/汤类数量控制
+  const coldCount = selectedSoFar.filter(d => d.tags?.includes('凉菜')).length
+  if (dish.tags?.includes('凉菜') && coldCount >= 2) score *= 0.3
+  const soupCount = selectedSoFar.filter(d => d.tags?.includes('汤')).length
+  if (dish.tags?.includes('汤') && soupCount >= 1) score *= 0.3
+
   return Math.max(score, 0.01)
 }
 
-/**
- * 带权重的随机选择
- * @param {Array} candidates - 候选菜品数组
- * @param {Object} context - 评分上下文
- * @returns {Object} 选中的菜品
- */
+// 带权重的随机选择
 export function weightedPick(candidates, context = {}) {
   if (candidates.length === 0) return null
   if (candidates.length === 1) return candidates[0]
@@ -85,7 +97,6 @@ export function weightedPick(candidates, context = {}) {
 
   const totalWeight = scored.reduce((sum, s) => sum + s.weight, 0)
   if (totalWeight <= 0) {
-    // 所有权重为零，随机选一个
     return candidates[Math.floor(Math.random() * candidates.length)]
   }
 
