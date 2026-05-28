@@ -1,0 +1,53 @@
+/* 全局样式 */
+:root {
+  --color-meat: #e74c3c;
+  --color-veg: #27ae60;
+  --cuisine-sichuan: #d35400;
+  --cuisine-hunan: #e67e22;
+  --cuisine-cantonese: #2980b9;
+  --cuisine-shandong: #8e44ad;
+  --cuisine-default: #7f8c8d;
+  --spice-1: #bdc3c7;
+  --spice-2: #f39c12;
+  --spice-3: #e67e22;
+  --spice-4: #d35400;
+  --spice-5: #c0392b;
+  --cell-gap: 12px;
+  --bg-page: #f5f7fa;
+  --bg-card: #ffffff;
+  --text-primary: #303133;
+  --text-secondary: #909399;
+  --border-color: #ebeef5;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg-page);
+  color: var(--text-primary);
+  line-height: 1.6;
+}
+
+#app {
+  min-height: 100vh;
+}
+
+/* 导出区域容器 */
+#export-area {
+  padding: 24px;
+}
+
+/* 动画 */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease;
+}
